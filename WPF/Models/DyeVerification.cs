@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace Flow.WPF.Models
 {
-    public class Dye : DomainObject
+    public class DyeVerification: Verification
     {
-       
-        public ICollection<DyeConfirmationMeasurement>? DyeMeasurements { get; set; }
+       // if problem with the 2 below, then make a DyeMeasurementType Enum and
+       // combine the tables into 1
+        public ICollection<BathMeasurement>? BathMeasurement { get; set; }
 
-        public ICollection<BathMeasurement>? BathMeasurements { get; set; }
-       
+        public ICollection<DyeMeasurement>? DyeMeasurement { get; set; }
+        public int SampleRate { get; set; }
+
         public double? ClearDyePPB { get; set; }
         public double? SewerDyePPB { get; set; }
         public double? ClearIntercept { get; set; }
@@ -28,7 +30,7 @@ namespace Flow.WPF.Models
         [MaxLength(60)]
         public string? VerificationInstrumentName { get; set; }
         public Calibration? CalibrationUsed { get; set; }
-        public SiteVisit? SiteVisit { get; set; }
+       // public SiteVisit? SiteVisit { get; set; }
        
     }
 }

@@ -7,9 +7,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Flow.WPF.Models
 {
-    public class CheckList : DomainObject
+    public class CheckList: DomainObject
     {
         
+       // public int Id { get; set; } 
         public bool? BatteryChanged { get; set; }
                
         public bool? SensorCleaned { get; set; }

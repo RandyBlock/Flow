@@ -29,7 +29,7 @@ namespace Flow.WPF.Services
             using (FlowDBContext context = _contextFactory.CreateDbContext(default!))
             {
 #nullable disable 
-                T entity = await context.Set<T>().FirstOrDefaultAsync((e) => e.Id == id);
+                T entity = await context.Set<T>().FirstOrDefaultAsync((e) => e.Id == e.Id);
 #nullable enable
                 if (entity == null) { return false; }
                 context.Set<T>().Remove(entity);

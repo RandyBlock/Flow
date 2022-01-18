@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Flow.WPF.Models
 {
-    public class Address : DomainObject
+    public class Address: DomainObject
     {
+        //public int Id { get; set; }
+
         [MaxLength(60)]
         public string? Street { get; set; }
         [MaxLength(20)]

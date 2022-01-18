@@ -11,19 +11,12 @@ namespace Flow.WPF.Models
         Sewer,
         Water
     }
-    public class BathMeasurement : DomainObject
+    public class BathMeasurement : VerificationMeasurement
     {
+        int DropNumber { get; set; }
+        double mlAdded { get; set; }
+        public  BathType BathType { get; set; }
         
-        public DateTime? TimeStamp { get; set; }
-
-        public double? PPB { get; set; }
-
-        public double? MVolt { get; set; }
-
-        public double? Temperature { get; set; }
-
-        public  BathType? BathType { get; set; }
-        public Dye? Dye { get; set; }
 
     }
 }

@@ -15,14 +15,20 @@ namespace Flow.WPF.Models
         West
     }
 
-    public class Site : DomainObject
+    public class Site: DomainObject
     {
+       // public int Id { get; set; }
+
         [MaxLength(20)]
         public string? Acronym { get; set; }
+
+        [MaxLength(200)]
         public Address? Address { get; set; }
         public Area? Area { get; set; }
+        
         [MaxLength(8)]
         public string? MHNumber { get; set; }
+
         [MaxLength(32)]
         public string? Chainage { get; set; }
 
@@ -33,8 +39,8 @@ namespace Flow.WPF.Models
         /*Orbit Number */
         [MaxLength(100)]
         public string? TMP { get; set; }
-        public ICollection<SiteVisit>? SiteVisit { get; set; }
-        public ICollection<WorkOrder>? WorkOrder { get; set; }
+        public ICollection<WorkOrder>? WorkOrders { get; set; }
+        
       
 
     }
