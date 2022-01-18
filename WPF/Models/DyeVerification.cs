@@ -14,8 +14,7 @@ namespace Flow.WPF.Models
         public ICollection<BathMeasurement>? BathMeasurement { get; set; }
 
         public ICollection<DyeMeasurement>? DyeMeasurement { get; set; }
-        public int SampleRate { get; set; }
-
+        
         public double? ClearDyePPB { get; set; }
         public double? SewerDyePPB { get; set; }
         public double? ClearIntercept { get; set; }

@@ -9,6 +9,7 @@ namespace Flow.WPF.Models
     public class Verification: DomainObject
     {
         //public int Id { get; set; } 
+        public int SampleRateSeconds { get; set; }
         public SiteVisit? SiteVisit  { get; set; }
         public ICollection<VerificationMeasurement>? VerificationMeasurements { get; set;}
     }

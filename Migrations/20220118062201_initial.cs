@@ -57,7 +57,7 @@ namespace Flow.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateTimeVisit = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SiteId = table.Column<int>(type: "int", nullable: false)
+                    SiteId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -66,8 +66,7 @@ namespace Flow.Migrations
                         name: "FK_SiteVisits_Sites_SiteId",
                         column: x => x.SiteId,
                         principalTable: "Sites",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -79,7 +78,7 @@ namespace Flow.Migrations
                     Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Completed = table.Column<bool>(type: "bit", nullable: true),
-                    SiteId = table.Column<int>(type: "int", nullable: false)
+                    SiteId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -88,8 +87,7 @@ namespace Flow.Migrations
                         name: "FK_WorkOrders_Sites_SiteId",
                         column: x => x.SiteId,
                         principalTable: "Sites",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -119,31 +117,16 @@ namespace Flow.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClampOns",
+                name: "Verifications",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    VerificationInstrumentName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
-                    SiteVisitId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClampOns", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClampOns_SiteVisits_SiteVisitId",
-                        column: x => x.SiteVisitId,
-                        principalTable: "SiteVisits",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Dyes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SampleRateSeconds = table.Column<int>(type: "int", nullable: false),
+                    SiteVisitId = table.Column<int>(type: "int", nullable: true),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MeterType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    SensorType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     ClearDyePPB = table.Column<double>(type: "float", nullable: true),
                     SewerDyePPB = table.Column<double>(type: "float", nullable: true),
                     ClearIntercept = table.Column<double>(type: "float", nullable: true),
@@ -156,92 +139,23 @@ namespace Flow.Migrations
                     WeightBefore = table.Column<double>(type: "float", nullable: true),
                     CalculateInjectionRate = table.Column<double>(type: "float", nullable: true),
                     VerificationInstrumentName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
-                    SiteVisitId = table.Column<int>(type: "int", nullable: false)
+                    EntryRequired = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dyes", x => x.Id);
+                    table.PrimaryKey("PK_Verifications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Dyes_SiteVisits_SiteVisitId",
+                        name: "FK_Verifications_SiteVisits_SiteVisitId",
                         column: x => x.SiteVisitId,
                         principalTable: "SiteVisits",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Manuals",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SiteVisitId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Manuals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Manuals_SiteVisits_SiteVisitId",
-                        column: x => x.SiteVisitId,
-                        principalTable: "SiteVisits",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ClampOnConfirmationMeasurements",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ConfirmationValue = table.Column<double>(type: "float", nullable: true),
-                    MeterValue = table.Column<double>(type: "float", nullable: true),
-                    RepositoryValue = table.Column<double>(type: "float", nullable: true),
-                    MeasurementType = table.Column<int>(type: "int", nullable: true),
-                    UnitType = table.Column<int>(type: "int", nullable: true),
-                    ClampOnId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ClampOnConfirmationMeasurements", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClampOnConfirmationMeasurements_ClampOns_ClampOnId",
-                        column: x => x.ClampOnId,
-                        principalTable: "ClampOns",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BathMeasurements",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PPB = table.Column<double>(type: "float", nullable: true),
-                    MVolt = table.Column<double>(type: "float", nullable: true),
-                    Temperature = table.Column<double>(type: "float", nullable: true),
-                    BathType = table.Column<int>(type: "int", nullable: true),
-                    DyeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BathMeasurements", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BathMeasurements_Dyes_DyeId",
-                        column: x => x.DyeId,
-                        principalTable: "Dyes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "Calibrations",
                 columns: table => new
                 {
-                    DyeId = table.Column<int>(type: "int", nullable: false),
+                    DyeVerificationId = table.Column<int>(type: "int", nullable: false),
                     DateCalibrated = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Intercept = table.Column<double>(type: "float", nullable: true),
                     Slope = table.Column<double>(type: "float", nullable: true),
@@ -250,104 +164,83 @@ namespace Flow.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Calibrations", x => x.DyeId);
+                    table.PrimaryKey("PK_Calibrations", x => x.DyeVerificationId);
                     table.ForeignKey(
-                        name: "FK_Calibrations_Dyes_DyeId",
-                        column: x => x.DyeId,
-                        principalTable: "Dyes",
+                        name: "FK_Calibrations_Verifications_DyeVerificationId",
+                        column: x => x.DyeVerificationId,
+                        principalTable: "Verifications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DyeConfirmationMeasurements",
+                name: "VerificationMeasurements",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ConfirmationValue = table.Column<double>(type: "float", nullable: true),
+                    MValue = table.Column<double>(type: "float", nullable: false),
+                    MType = table.Column<int>(type: "int", nullable: false),
+                    UType = table.Column<int>(type: "int", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VerificationId = table.Column<int>(type: "int", nullable: true),
+                    BathType = table.Column<int>(type: "int", nullable: true),
+                    BathMeasurement_DyeVerificationId = table.Column<int>(type: "int", nullable: true),
+                    MeterName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ClampOnMeasurement_TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DyeMeasurement_TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FlowRate = table.Column<double>(type: "float", nullable: true),
+                    DyeMeasurement_UnitType = table.Column<int>(type: "int", nullable: true),
+                    DyeVerificationId = table.Column<int>(type: "int", nullable: true),
                     MeterValue = table.Column<double>(type: "float", nullable: true),
-                    RepositoryValue = table.Column<double>(type: "float", nullable: true),
-                    MeasurementType = table.Column<int>(type: "int", nullable: true),
                     UnitType = table.Column<int>(type: "int", nullable: true),
-                    DyeId = table.Column<int>(type: "int", nullable: false)
+                    MeasurementType = table.Column<int>(type: "int", nullable: true),
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DyeConfirmationMeasurements", x => x.Id);
+                    table.PrimaryKey("PK_VerificationMeasurements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DyeConfirmationMeasurements_Dyes_DyeId",
-                        column: x => x.DyeId,
-                        principalTable: "Dyes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ManualConfirmationMeasurements",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ConfirmationValue = table.Column<double>(type: "float", nullable: true),
-                    MeterValue = table.Column<double>(type: "float", nullable: true),
-                    RepositoryValue = table.Column<double>(type: "float", nullable: true),
-                    MeasurementType = table.Column<int>(type: "int", nullable: true),
-                    UnitType = table.Column<int>(type: "int", nullable: true),
-                    ManualId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ManualConfirmationMeasurements", x => x.Id);
+                        name: "FK_VerificationMeasurements_Verifications_BathMeasurement_DyeVerificationId",
+                        column: x => x.BathMeasurement_DyeVerificationId,
+                        principalTable: "Verifications",
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ManualConfirmationMeasurements_Manuals_ManualId",
-                        column: x => x.ManualId,
-                        principalTable: "Manuals",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_VerificationMeasurements_Verifications_DyeVerificationId",
+                        column: x => x.DyeVerificationId,
+                        principalTable: "Verifications",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_VerificationMeasurements_Verifications_VerificationId",
+                        column: x => x.VerificationId,
+                        principalTable: "Verifications",
+                        principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BathMeasurements_DyeId",
-                table: "BathMeasurements",
-                column: "DyeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClampOnConfirmationMeasurements_ClampOnId",
-                table: "ClampOnConfirmationMeasurements",
-                column: "ClampOnId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClampOns_SiteVisitId",
-                table: "ClampOns",
-                column: "SiteVisitId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DyeConfirmationMeasurements_DyeId",
-                table: "DyeConfirmationMeasurements",
-                column: "DyeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Dyes_SiteVisitId",
-                table: "Dyes",
-                column: "SiteVisitId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ManualConfirmationMeasurements_ManualId",
-                table: "ManualConfirmationMeasurements",
-                column: "ManualId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Manuals_SiteVisitId",
-                table: "Manuals",
-                column: "SiteVisitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SiteVisits_SiteId",
                 table: "SiteVisits",
                 column: "SiteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VerificationMeasurements_BathMeasurement_DyeVerificationId",
+                table: "VerificationMeasurements",
+                column: "BathMeasurement_DyeVerificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VerificationMeasurements_DyeVerificationId",
+                table: "VerificationMeasurements",
+                column: "DyeVerificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VerificationMeasurements_VerificationId",
+                table: "VerificationMeasurements",
+                column: "VerificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Verifications_SiteVisitId",
+                table: "Verifications",
+                column: "SiteVisitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkOrders_SiteId",
@@ -361,34 +254,19 @@ namespace Flow.Migrations
                 name: "Adresses");
 
             migrationBuilder.DropTable(
-                name: "BathMeasurements");
-
-            migrationBuilder.DropTable(
                 name: "Calibrations");
 
             migrationBuilder.DropTable(
                 name: "CheckLists");
 
             migrationBuilder.DropTable(
-                name: "ClampOnConfirmationMeasurements");
-
-            migrationBuilder.DropTable(
-                name: "DyeConfirmationMeasurements");
-
-            migrationBuilder.DropTable(
-                name: "ManualConfirmationMeasurements");
+                name: "VerificationMeasurements");
 
             migrationBuilder.DropTable(
                 name: "WorkOrders");
 
             migrationBuilder.DropTable(
-                name: "ClampOns");
-
-            migrationBuilder.DropTable(
-                name: "Dyes");
-
-            migrationBuilder.DropTable(
-                name: "Manuals");
+                name: "Verifications");
 
             migrationBuilder.DropTable(
                 name: "SiteVisits");

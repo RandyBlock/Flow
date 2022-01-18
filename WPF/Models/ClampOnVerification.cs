@@ -13,6 +13,6 @@ namespace Flow.WPF.Models
         public string? MeterType { get; set; }
         [MaxLength(100)]
         public string? SensorType { get; set;}
-        public int SampleRateSeconds { get; set; }
+        
     }
 }
